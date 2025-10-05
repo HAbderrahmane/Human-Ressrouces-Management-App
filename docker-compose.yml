@@ -1,0 +1,71 @@
+services:
+  #  WRITE DATABASE (command side)
+  postgres_write:
+    image: postgres:16
+    container_name: postgres_write
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: profile_write
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_write_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U write_user -d profile_write"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  #  READ DATABASE (query side)
+  postgres_read:
+    image: postgres:16
+    container_name: postgres_read
+    restart: always
+    environment:
+      POSTGRES_USER: read_user
+      POSTGRES_PASSWORD: read_pwd
+      POSTGRES_DB: profile_read
+    ports:
+      - "5434:5432"
+    volumes:
+      - pg_read_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U read_user -d profile_read"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+# KAFKA (for event sourcing)
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: kafka
+    restart: always
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_LISTENERS: PLAINTEXT://:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    ports:
+      - "9092:9092"
+
+
+  #  ADMINER (UI to check Postgres)
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres_write
+      - postgres_read
+
+volumes:
+  pg_write_data:
+  pg_read_data:
+  kafka_data:

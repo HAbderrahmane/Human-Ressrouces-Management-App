@@ -1,0 +1,53 @@
+# Build results
+bin/
+obj/
+out/
+[Bb]uild/
+[Ll]og/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Backup & temporary files
+*.tmp
+*.bak
+*.log
+*.tlog
+*.cache
+*.dbmdl
+
+# Auto-generated files
+Generated/
+GeneratedCode/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+*.dll
+*.exe
+
+# Publish output
+publish/
+AppPackages/
+bundle/
+dist/
+
+# Rider and VS Code
+.idea/
+.vscode/
+
+# Others
+node_modules/
+.env
