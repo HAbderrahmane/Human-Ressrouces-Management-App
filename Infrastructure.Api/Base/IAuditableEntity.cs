@@ -1,7 +1,9 @@
 namespace Infrastructure.Api.Base;
 
-public interface IAuditableEntity
+public abstract class AuditableEntity : BaseEntity
 {
-    DateTime CreatedAt { get; }
-    DateTime? UpdatedAt { get; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; set; }
+
+    public void Touch() => UpdatedAt = DateTime.UtcNow;
 }

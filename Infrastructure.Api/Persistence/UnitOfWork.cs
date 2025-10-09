@@ -1,10 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Infrastructure.Api.Persistence;
+﻿namespace Infrastructure.Api.Persistence;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly DbContext _context;
-    public UnitOfWork(DbContext context) => _context = context;
-    public async Task<int> CommitAsync() => await _context.SaveChangesAsync();
+    private readonly WriteDbContext _context;
+
+    public UnitOfWork(WriteDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        => await _context.SaveChangesAsync(cancellationToken);
 }

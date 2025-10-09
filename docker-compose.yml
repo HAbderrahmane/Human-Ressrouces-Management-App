@@ -38,14 +38,15 @@ services:
       retries: 10
 
 # KAFKA (for event sourcing)
+
   kafka:
     image: confluentinc/cp-kafka:7.6.1
     container_name: kafka
     restart: always
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_LISTENERS: PLAINTEXT://:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://host.docker.internal:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
@@ -53,8 +54,8 @@ services:
     ports:
       - "9092:9092"
 
-
   #  ADMINER (UI to check Postgres)
+
   adminer:
     image: adminer
     container_name: adminer
