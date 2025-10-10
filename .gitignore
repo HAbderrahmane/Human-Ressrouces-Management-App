@@ -51,3 +51,6 @@ dist/
 # Others
 node_modules/
 .env
+
+# Prevent Visual Studio from recreating local .sln files
+Infrastructure.Api.sln
