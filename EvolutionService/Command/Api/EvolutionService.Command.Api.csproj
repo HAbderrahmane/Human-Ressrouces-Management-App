@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\Application.csproj" />
+    <ProjectReference Include="..\Infrastructure\EvolutionService.Command.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
