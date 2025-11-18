@@ -1,9 +1,7 @@
-# Makefile for HRM microservice dev environment
-
 .PHONY: up down kafka logs clean
 
 up:
-	@echo " Starting Kafka and Postgres containers..."
+	@echo " Starting Kafka, Postgres, and MongoDB containers..."
 	docker compose -f docker-compose.yml up -d
 
 down:
@@ -18,6 +16,5 @@ logs:
 	@docker compose logs -f
 
 clean:
-	@echo "Removing all volumes..."
+	@echo " Removing all volumes..."
 	docker compose down -v
-

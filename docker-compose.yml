@@ -1,5 +1,5 @@
 services:
-  #  WRITE DATABASE (command side)
+  # WRITE DATABASE (command side)
   postgres_write:
     image: postgres:16
     container_name: postgres_write
@@ -13,32 +13,46 @@ services:
     volumes:
       - pg_write_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U write_user -d profile_write"]
+      test: [ "CMD-SHELL", "pg_isready -U admin -d profile_write" ]
       interval: 5s
       timeout: 5s
       retries: 10
 
-  #  READ DATABASE (query side)
-  postgres_read:
-    image: postgres:16
-    container_name: postgres_read
+  # READ DATABASE (query side — replaced by MongoDB)
+  mongo_read:
+    image: mongo:7
+    container_name: mongo_read
     restart: always
     environment:
-      POSTGRES_USER: read_user
-      POSTGRES_PASSWORD: read_pwd
-      POSTGRES_DB: profile_read
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
     ports:
-      - "5434:5432"
+      - "27017:27017"
     volumes:
-      - pg_read_data:/var/lib/postgresql/data
+      - mongo_data:/data/db
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U read_user -d profile_read"]
-      interval: 5s
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
       timeout: 5s
       retries: 10
 
-# KAFKA (for event sourcing)
+  mongo_express:
+      image: mongo-express
+      container_name: mongo_express
+      restart: always
+      ports:
+        - "8081:8081"
+      environment:
+        ME_CONFIG_MONGODB_SERVER: mongo_read
+        ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo_read:27017
+        ME_CONFIG_MONGODB_ADMINUSERNAME: root
+        ME_CONFIG_MONGODB_ADMINPASSWORD: root
+        ME_CONFIG_BASICAUTH: "false"
+        ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+      depends_on:
+        - mongo_read
 
+  # KAFKA (for event sourcing)
   kafka:
     image: confluentinc/cp-kafka:7.6.1
     container_name: kafka
@@ -54,8 +68,7 @@ services:
     ports:
       - "9092:9092"
 
-  #  ADMINER (UI to check Postgres)
-
+  # ADMINER (UI to check Postgres)
   adminer:
     image: adminer
     container_name: adminer
@@ -64,9 +77,8 @@ services:
       - "8080:8080"
     depends_on:
       - postgres_write
-      - postgres_read
 
 volumes:
   pg_write_data:
-  pg_read_data:
+  mongo_data:
   kafka_data:
