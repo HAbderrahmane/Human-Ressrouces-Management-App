@@ -109,6 +109,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfileService.Query.Infrastructure", "ProfileService\Query\Infrastructure\ProfileService.Query.Infrastructure.csproj", "{21863403-7D9D-4B3B-87AA-64810FFA864E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedKernel", "SharedKernel\SharedKernel.csproj", "{32B5EFD5-C8D2-492E-B544-1234C6963824}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -515,6 +517,18 @@ Global
 		{21863403-7D9D-4B3B-87AA-64810FFA864E}.Release|x64.Build.0 = Release|Any CPU
 		{21863403-7D9D-4B3B-87AA-64810FFA864E}.Release|x86.ActiveCfg = Release|Any CPU
 		{21863403-7D9D-4B3B-87AA-64810FFA864E}.Release|x86.Build.0 = Release|Any CPU
+		{32B5EFD5-C8D2-492E-B544-1234C6963824}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32B5EFD5-C8D2-492E-B544-1234C6963824}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32B5EFD5-C8D2-492E-B544-1234C6963824}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{32B5EFD5-C8D2-492E-B544-1234C6963824}.Debug|x64.Build.0 = Debug|Any CPU
+		{32B5EFD5-C8D2-492E-B544-1234C6963824}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{32B5EFD5-C8D2-492E-B544-1234C6963824}.Debug|x86.Build.0 = Debug|Any CPU
+		{32B5EFD5-C8D2-492E-B544-1234C6963824}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32B5EFD5-C8D2-492E-B544-1234C6963824}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32B5EFD5-C8D2-492E-B544-1234C6963824}.Release|x64.ActiveCfg = Release|Any CPU
+		{32B5EFD5-C8D2-492E-B544-1234C6963824}.Release|x64.Build.0 = Release|Any CPU
+		{32B5EFD5-C8D2-492E-B544-1234C6963824}.Release|x86.ActiveCfg = Release|Any CPU
+		{32B5EFD5-C8D2-492E-B544-1234C6963824}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

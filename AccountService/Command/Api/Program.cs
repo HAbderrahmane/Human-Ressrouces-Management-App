@@ -1,41 +1,40 @@
+using AccountService.Command.Application.Handlers;
+using Infrastructure.Api.Messaging;
+using MediatR;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// Controllers + Swagger
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// MediatR v13 registration
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(CreateAccountHandler).Assembly);
+});
+
+// Kafka Producer from config
+builder.Services.AddSingleton<IKafkaProducer>(sp =>
+{
+    var logger = sp.GetRequiredService<ILogger<KafkaProducer>>();
+    var bootstrap = builder.Configuration["Kafka:BootstrapServers"];
+    if (string.IsNullOrWhiteSpace(bootstrap))
+        throw new InvalidOperationException("Kafka:BootstrapServers is missing in configuration.");
+
+    return new KafkaProducer(logger, bootstrap!);
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Swagger in Dev
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Application\AccountService.Command.Application.csproj" />
     <ProjectReference Include="..\Infrastructure\AccountService.Command.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure.Api\Infrastructure.Api.csproj" />
   </ItemGroup>
 
 </Project>
