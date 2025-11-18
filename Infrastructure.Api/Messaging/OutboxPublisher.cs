@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using SharedKernel.Events;
 
 namespace Infrastructure.Api.Messaging;
 
@@ -18,8 +20,6 @@ public class OutboxPublisher : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Outbox publisher running.");
-
         while (!stoppingToken.IsCancellationRequested)
         {
             try
@@ -33,16 +33,17 @@ public class OutboxPublisher : BackgroundService
 
                 foreach (var message in pending)
                 {
-                    await _producer.ProduceAsync(message.EventType, message.Payload);
+                    var eventType = Type.GetType(message.EventType)!;
+                    var evt = (BaseEvent)JsonSerializer.Deserialize(message.Payload, eventType)!;
+
+                    await _producer.ProduceAsync(evt, message.Payload, "outbox");
+
                     message.PublishedAt = DateTime.UtcNow;
                 }
 
                 await dbContext.SaveChangesAsync(stoppingToken);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Outbox publishing failed");
-            }
+            catch { }
 
             await Task.Delay(_interval, stoppingToken);
         }

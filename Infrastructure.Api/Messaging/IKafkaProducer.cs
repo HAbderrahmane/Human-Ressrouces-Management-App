@@ -1,6 +1,8 @@
-﻿namespace Infrastructure.Api.Messaging;
+﻿using SharedKernel.Events;
+
+namespace Infrastructure.Api.Messaging;
 
 public interface IKafkaProducer
 {
-    Task ProduceAsync(string topic, string message, string? key = null);
+    Task ProduceAsync(BaseEvent evt, object payload, string topic);
 }

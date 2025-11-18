@@ -1,0 +1,23 @@
+using SharedKernel.Events;
+
+namespace Infrastructure.Api.Messaging;
+
+public class EventEnvelope
+{
+    public required string EventType { get; set; }
+    public required object Payload { get; set; }
+    public Guid EventId { get; set; }
+    public DateTime OccurredAt { get; set; }
+
+    public static EventEnvelope FromEvent(BaseEvent evt, object payload)
+    {
+        return new EventEnvelope
+        {
+            EventType = evt.GetType().AssemblyQualifiedName!,
+            Payload = payload,
+            EventId = evt.EventId,
+            OccurredAt = evt.OccurredAt,
+        };
+    }
+}
+

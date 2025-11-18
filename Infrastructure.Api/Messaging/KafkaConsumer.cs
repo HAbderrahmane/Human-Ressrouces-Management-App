@@ -1,10 +1,11 @@
 ﻿using Confluent.Kafka;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace Infrastructure.Api.Messaging;
 
-public class KafkaConsumer : BackgroundService, IKafkaConsumer
+public class KafkaConsumer : BackgroundService
 {
     private readonly ILogger<KafkaConsumer> _logger;
     private readonly string _topic;
@@ -28,27 +29,26 @@ public class KafkaConsumer : BackgroundService, IKafkaConsumer
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Kafka consumer listening on topic '{Topic}'", _topic);
+        _logger.LogInformation("Kafka consumer listening on '{Topic}'", _topic);
         _consumer.Subscribe(_topic);
 
         try
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                try
-                {
-                    var result = _consumer.Consume(stoppingToken);
-                    if (result is null) continue;
+                var result = _consumer.Consume(stoppingToken);
+                if (result == null) continue;
 
-                    _logger.LogInformation("Message received: {Message}", result.Message.Value);
-
-                    // TODO: process your message here
-                    await HandleMessageAsync(result.Message.Key, result.Message.Value);
-                }
-                catch (ConsumeException ex)
+                var wrapper = JsonSerializer.Deserialize<EventMessage>(result.Message.Value);
+                if (wrapper == null)
                 {
-                    _logger.LogError(ex, "Kafka consume error: {Reason}", ex.Error.Reason);
+                    _logger.LogWarning("Invalid event format");
+                    continue;
                 }
+
+                _logger.LogInformation("📦 Received event {EventType}", wrapper.EventType);
+
+                await HandleEvent(wrapper.EventType, wrapper.Payload);
             }
         }
         catch (OperationCanceledException)
@@ -58,20 +58,21 @@ public class KafkaConsumer : BackgroundService, IKafkaConsumer
         finally
         {
             _consumer.Close();
-            _consumer.Dispose();
         }
     }
 
-    private Task HandleMessageAsync(string key, string value)
+    private Task HandleEvent(string eventType, JsonElement payload)
     {
-        // Here you could deserialize JSON and handle specific events
-        _logger.LogDebug("Handling Kafka message Key={Key} Value={Value}", key, value);
+        _logger.LogInformation("🔎 Dispatching event '{EventType}'", eventType);
+
+        // TODO: Resolve handler from DI and call correct handler based on eventType
+
         return Task.CompletedTask;
     }
+}
 
-    public override Task StopAsync(CancellationToken cancellationToken)
-    {
-        _logger.LogInformation("Kafka consumer stopped.");
-        return base.StopAsync(cancellationToken);
-    }
+public class EventMessage
+{
+    public string EventType { get; set; }
+    public JsonElement Payload { get; set; }
 }
