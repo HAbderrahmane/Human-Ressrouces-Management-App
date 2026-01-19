@@ -58,18 +58,35 @@ public class KafkaProducer : IKafkaProducer
 
     public async Task ProduceAsync(BaseEvent evt, object payload, string topic)
     {
-        var envelope = EventEnvelope.FromEvent(evt, payload);
-        var json = JsonSerializer.Serialize(envelope);
+        try
+        {
+            var envelope = EventEnvelope.FromEvent(evt, payload);
+            var json = JsonSerializer.Serialize(envelope);
 
-        await EnsureTopicExistsAsync(topic);
+            _logger.LogInformation("   Publishing event to Kafka:");
+            _logger.LogInformation("   Topic: {Topic}", topic);
+            _logger.LogInformation("   Event Type: {EventType}", envelope.EventType);
+            _logger.LogInformation("   JSON: {Json}", json);
 
-        await _producer.ProduceAsync(
-            topic,
-            new Message<string, string>
-            {
-                Key = evt.EventId.ToString(),
-                Value = json
-            }
-        );
+            await EnsureTopicExistsAsync(topic);
+
+            await _producer.ProduceAsync(
+                topic,
+                new Message<string, string>
+                {
+                    Key = evt.EventId.ToString(),
+                    Value = json
+                }
+            );
+
+            _logger.LogInformation("  Event published successfully");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "FAILED to publish event to Kafka");
+            _logger.LogError(ex, "Exception Type: {ExceptionType}", ex.GetType().Name);
+            _logger.LogError(ex, "Message: {Message}", ex.Message);
+            throw;
+        }
     }
 }

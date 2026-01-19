@@ -20,8 +20,10 @@ public class CreateAccountHandler : IRequestHandler<CreateAccountCommand, Guid>
 
         var evt = new AccountCreatedEvent(id, request.Email);
 
-        // ✅ NEW: send as event envelope, not string JSON
-        await _producer.ProduceAsync(evt, evt, "account.events");
+        // Create a clean payload without BaseEvent properties
+        var payload = new { evt.AccountId, evt.Email };
+
+        await _producer.ProduceAsync(evt, payload, "account.events");
 
         Console.WriteLine($"AccountCreated event published for {request.Email}");
 

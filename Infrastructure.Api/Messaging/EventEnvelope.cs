@@ -13,7 +13,7 @@ public class EventEnvelope
     {
         return new EventEnvelope
         {
-            EventType = evt.GetType().AssemblyQualifiedName!,
+            EventType = evt.GetType().FullName!,
             Payload = payload,
             EventId = evt.EventId,
             OccurredAt = evt.OccurredAt,
