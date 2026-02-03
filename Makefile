@@ -1,8 +1,12 @@
-.PHONY: up down kafka logs clean
+.PHONY: up up-min down kafka logs clean
 
 up:
-	@echo " Starting Kafka, Postgres, and MongoDB containers..."
-	docker compose -f docker-compose.yml up -d
+	@echo " Starting all services (full)..."
+	docker compose -f docker-compose.yml --profile full up -d
+
+up-min:
+	@echo " Starting minimal services (postgres, mongo, kafka)..."
+	docker compose -f docker-compose.yml --profile minimal up -d
 
 down:
 	@echo " Stopping containers..."

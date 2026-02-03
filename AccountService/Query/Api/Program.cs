@@ -53,6 +53,11 @@ builder.Services.AddHostedService(sp =>
                     await eventConsumer.HandleAccountCreatedAsync(payload);
                 }
             }
+            catch (Exception ex)
+            {
+                var logger = sp.GetRequiredService<ILogger<Program>>();
+                logger.LogError(ex, "Error handling AccountCreatedEvent");
+            }
         });
 
     return consumer;

@@ -13,6 +13,9 @@ services:
       - "5433:5432"
     volumes:
       - pg_write_data:/var/lib/postgresql/data
+    profiles:
+      - minimal
+      - full
 
   mongo_read:
     image: mongo:7
@@ -25,6 +28,9 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    profiles:
+      - minimal
+      - full
 
   mongo_express:
     image: mongo-express
@@ -41,6 +47,8 @@ services:
       ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
     depends_on:
       - mongo_read
+    profiles:
+      - full
 
   kafka:
     image: confluentinc/cp-kafka:7.6.1
@@ -68,6 +76,9 @@ services:
       - "29092:29092"
     volumes:
       - kafka_data:/var/lib/kafka/data
+    profiles:
+      - minimal
+      - full
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -82,6 +93,136 @@ services:
       DYNAMIC_CONFIG_ENABLED: "true"
     depends_on:
       - kafka
+    profiles:
+      - full
+
+  account-service-command:
+    build:
+      context: .
+      dockerfile: AccountService/Command/Api/Dockerfile
+    container_name: account-service-command
+    ports:
+      - "5222:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      - postgres_write
+      - kafka
+    profiles:
+      - full
+
+  account-service-query:
+    build:
+      context: .
+      dockerfile: AccountService/Query/Api/Dockerfile
+    container_name: account-service-query
+    ports:
+      - "5115:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      - mongo_read
+      - kafka
+    profiles:
+      - full
+
+  profile-service-command:
+    build:
+      context: .
+      dockerfile: ProfileService/Command/Api/Dockerfile
+    container_name: profile-service-command
+    ports:
+      - "5062:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      - postgres_write
+      - kafka
+    profiles:
+      - full
+
+  profile-service-query:
+    build:
+      context: .
+      dockerfile: ProfileService/Query/Api/Dockerfile
+    container_name: profile-service-query
+    ports:
+      - "5003:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      - mongo_read
+      - kafka
+    profiles:
+      - full
+
+  time-service-command:
+    build:
+      context: .
+      dockerfile: TimeService/Command/Api/Dockerfile
+    container_name: time-service-command
+    ports:
+      - "5033:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      - postgres_write
+      - kafka
+    profiles:
+      - full
+
+  time-service-query:
+    build:
+      context: .
+      dockerfile: TimeService/Query/Api/Dockerfile
+    container_name: time-service-query
+    ports:
+      - "5257:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      - mongo_read
+      - kafka
+    profiles:
+      - full
+
+  evolution-service-command:
+    build:
+      context: .
+      dockerfile: EvolutionService/Command/Api/Dockerfile
+    container_name: evolution-service-command
+    ports:
+      - "5049:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      - postgres_write
+      - kafka
+    profiles:
+      - full
+
+  evolution-service-query:
+    build:
+      context: .
+      dockerfile: EvolutionService/Query/Api/Dockerfile
+    container_name: evolution-service-query
+    ports:
+      - "5011:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      - mongo_read
+      - kafka
+    profiles:
+      - full
 
 volumes:
   pg_write_data:
