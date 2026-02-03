@@ -48,6 +48,7 @@ services:
     depends_on:
       - mongo_read
     profiles:
+      - minimal
       - full
 
   kafka:
@@ -94,6 +95,7 @@ services:
     depends_on:
       - kafka
     profiles:
+      - minimal
       - full
 
   account-service-command:
