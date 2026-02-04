@@ -4,9 +4,7 @@
     <ProjectReference Include="..\Domain\AccountService.Command.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MediatR" Version="13.0.0" />
-  </ItemGroup>
+
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>

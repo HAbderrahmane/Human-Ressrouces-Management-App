@@ -1,32 +1,44 @@
-﻿using MediatR;
-using Infrastructure.Api.Messaging;
+﻿using AccountService.Command.Domain;
 using AccountService.Command.Domain.Events;
+using Infrastructure.Api.Messaging;
+using Infrastructure.Api.Persistence;
 using AccountService.Command.Application.Commands;
+using AccountService.Command.Application.DTOs;
 
 namespace AccountService.Command.Application.Handlers;
 
-public class CreateAccountHandler : IRequestHandler<CreateAccountCommand, Guid>
+public class CreateAccountHandler : ICommandHandler<CreateAccountCommand, Guid>
 {
-    private readonly IKafkaProducer _producer;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IKafkaProducer _kafkaProducer;
 
-    public CreateAccountHandler(IKafkaProducer producer)
+    public CreateAccountHandler(IUnitOfWork unitOfWork, IKafkaProducer kafkaProducer)
     {
-        _producer = producer;
+        _unitOfWork = unitOfWork;
+        _kafkaProducer = kafkaProducer;
     }
 
-    public async Task<Guid> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> HandleAsync(CreateAccountCommand request, CancellationToken cancellationToken = default)
     {
-        var id = Guid.NewGuid();
+        var account = new Account
+        {
+            Id = Guid.NewGuid(),
+            Email = request.Email,
+            PasswordHash = request.Password,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
 
-        var evt = new AccountCreatedEvent(id, request.Email);
+        // Persister l'entité selon votre UnitOfWork/DbContext (exemple : ajout puis SaveChangesAsync)
+        // Si vous n'avez pas ajouté l'entité au contexte, assurez-vous de le faire ici avant SaveChangesAsync.
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        // Create a clean payload without BaseEvent properties
-        var payload = new { evt.AccountId, evt.Email };
+        var accountCreatedEvent = new AccountCreatedEvent(account.Id, account.Email);
+        var payload = new { AccountId = account.Id, Email = account.Email, CreatedAt = account.CreatedAt };
 
-        await _producer.ProduceAsync(evt, payload, "account.events");
+        // Publier sur le topic commun utilisé par le consumer
+        await _kafkaProducer.ProduceAsync(accountCreatedEvent, payload, "account.events");
 
-        Console.WriteLine($"AccountCreated event published for {request.Email}");
-
-        return id;
+        return account.Id;
     }
 }

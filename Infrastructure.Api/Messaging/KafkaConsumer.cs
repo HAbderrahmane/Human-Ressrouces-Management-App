@@ -1,6 +1,4 @@
 ﻿using Confluent.Kafka;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 namespace Infrastructure.Api.Messaging;
@@ -183,8 +181,8 @@ public class KafkaConsumer : BackgroundService
 
 public class EventMessage
 {
-    public required string EventType { get; set; }
-    public required JsonElement Payload { get; set; }
+    public string EventType { get; set; }
+    public JsonElement Payload { get; set; }
     public Guid EventId { get; set; }
     public DateTime OccurredAt { get; set; }
 }

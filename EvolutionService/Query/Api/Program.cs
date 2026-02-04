@@ -1,4 +1,3 @@
-
 namespace EvolutionService.Query.Api;
 
 public class Program
@@ -32,7 +31,7 @@ public class Program
 
         app.MapGet("/weatherforecast", (HttpContext httpContext) =>
         {
-            var forecast =  Enumerable.Range(1, 5).Select(index =>
+            var forecast = Enumerable.Range(1, 5).Select(index =>
                 new WeatherForecast
                 {
                     Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),

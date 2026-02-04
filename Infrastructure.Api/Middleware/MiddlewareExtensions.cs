@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Infrastructure.Api.Common;
-
-namespace Infrastructure.Api.Middleware;
+﻿namespace Infrastructure.Api.Middleware;
 
 public static class MiddlewareExtensions
 {

@@ -1,21 +1,32 @@
-using System.Text.Json;
-using AccountService.Command.Domain.Events;
 using AccountService.Query.Domain;
 using AccountService.Query.Infrastructure;
+using Infrastructure.Api.Messaging;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
+using System.Text.Json;
 
 namespace AccountService.Query.Application.Consumers;
 
-public class AccountEventConsumer
+/// <summary>
+/// Event handler for AccountCreatedEvent.
+/// Implements IEventHandler so it can be discovered and registered automatically.
+/// </summary>
+public class AccountEventConsumer : IEventHandler
 {
     private readonly ReadDbContext _readDb;
     private readonly ILogger<AccountEventConsumer> _logger;
+
+    // Event type name used by the producer
+    public string EventType => "AccountService.Command.Domain.Events.AccountCreatedEvent";
 
     public AccountEventConsumer(ReadDbContext readDb, ILogger<AccountEventConsumer> logger)
     {
         _readDb = readDb;
         _logger = logger;
+    }
+
+    public async Task HandleAsync(JsonElement payload)
+    {
+        await HandleAccountCreatedAsync(payload);
     }
 
     public async Task HandleAccountCreatedAsync(JsonElement payload)
@@ -34,12 +45,11 @@ public class AccountEventConsumer
             };
 
             await _readDb.Accounts.InsertOneAsync(readModel);
-            _logger.LogInformation("✅ Account read model created for {Email}", email);
+            _logger.LogInformation("Account read model created for {Email}", email);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "❌ Error handling AccountCreatedEvent");
-            // Don't rethrow - let the consumer continue
+            _logger.LogError(ex, "Error handling AccountCreatedEvent");
         }
     }
 }

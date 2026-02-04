@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 using SharedKernel.Events;
+using System.Text.Json;
 
 namespace Infrastructure.Api.Messaging;
 

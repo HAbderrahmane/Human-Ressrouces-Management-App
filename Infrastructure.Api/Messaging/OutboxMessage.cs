@@ -10,4 +10,3 @@ public class OutboxMessage
     public DateTime OccurredAt { get; set; } = DateTime.UtcNow;
     public DateTime? PublishedAt { get; set; }
 }
-

@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Infrastructure.Api\Infrastructure.Api.csproj" />
     <ProjectReference Include="..\Domain\AccountService.Query.Domain.csproj" />
     <ProjectReference Include="..\Infrastructure\AccountService.Query.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="13.0.0" />
     <PackageReference Include="Confluent.Kafka" Version="2.11.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.25.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.1" />
   </ItemGroup>
 
   <PropertyGroup>

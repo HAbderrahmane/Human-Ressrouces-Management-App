@@ -1,6 +1,7 @@
 version: "3.8"
 
 services:
+  # WRITE DATABASE (command side)
   postgres_write:
     image: postgres:16
     container_name: postgres_write
@@ -13,10 +14,16 @@ services:
       - "5433:5432"
     volumes:
       - pg_write_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d profile_write" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     profiles:
       - minimal
       - full
 
+  # READ DATABASE (query side — replaced by MongoDB)
   mongo_read:
     image: mongo:7
     container_name: mongo_read
@@ -28,6 +35,11 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     profiles:
       - minimal
       - full
@@ -51,6 +63,7 @@ services:
       - minimal
       - full
 
+  # KAFKA (for event sourcing)
   kafka:
     image: confluentinc/cp-kafka:7.6.1
     container_name: kafka
@@ -77,6 +90,19 @@ services:
       - "29092:29092"
     volumes:
       - kafka_data:/var/lib/kafka/data
+    profiles:
+      - minimal
+      - full
+
+  # ADMINER (UI to check Postgres)
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres_write
     profiles:
       - minimal
       - full

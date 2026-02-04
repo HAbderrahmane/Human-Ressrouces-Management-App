@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
-using Infrastructure.Api;
+﻿using Infrastructure.Api;
 using Infrastructure.Api.Messaging;
 using Infrastructure.Api.Middleware;
 
@@ -53,4 +47,5 @@ app.MapPost("/produce", async (IKafkaProducer producer) =>
 
 app.Run();
 
-public class TestEvent : BaseEvent { }
+public class TestEvent : BaseEvent
+{ }

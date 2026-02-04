@@ -14,9 +14,14 @@ public class EfRepository<T> : IRepository<T> where T : class
     }
 
     public async Task<T?> GetByIdAsync(Guid id) => await _set.FindAsync(id);
+
     public async Task<IEnumerable<T>> GetAllAsync() => await _set.ToListAsync();
+
     public async Task AddAsync(T entity) => await _set.AddAsync(entity);
+
     public void Update(T entity) => _set.Update(entity);
+
     public void Remove(T entity) => _set.Remove(entity);
+
     public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();
 }

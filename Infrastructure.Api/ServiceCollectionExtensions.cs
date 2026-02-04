@@ -1,9 +1,6 @@
 ﻿using Infrastructure.Api.Messaging;
 using Infrastructure.Api.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Api;
 

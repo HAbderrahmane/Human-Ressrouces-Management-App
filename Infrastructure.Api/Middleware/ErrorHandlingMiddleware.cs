@@ -1,8 +1,6 @@
-﻿using System.Net;
+﻿using Infrastructure.Api.Common;
+using System.Net;
 using System.Text.Json;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Infrastructure.Api.Common;
 
 namespace Infrastructure.Api.Middleware;
 

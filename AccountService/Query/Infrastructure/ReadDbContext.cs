@@ -1,6 +1,6 @@
-using MongoDB.Driver;
 using AccountService.Query.Domain;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Driver;
 
 namespace AccountService.Query.Infrastructure;
 
