@@ -18,7 +18,6 @@
 		<ProjectReference Include="..\Infrastructure\AccountService.Query.Infrastructure.csproj" />
 		<ProjectReference Include="..\Domain\AccountService.Query.Domain.csproj" />
 		<ProjectReference Include="..\..\..\Infrastructure.Api\Infrastructure.Api.csproj" />
-		<ProjectReference Include="..\..\..\SharedKernel\SharedKernel.csproj" />
 	</ItemGroup>
 
 </Project>

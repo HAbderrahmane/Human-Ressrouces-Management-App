@@ -1,0 +1,6 @@
+@HrmApp.Gateway_HostAddress = http://localhost:5240
+
+GET {{HrmApp.Gateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

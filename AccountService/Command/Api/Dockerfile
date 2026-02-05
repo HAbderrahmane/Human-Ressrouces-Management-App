@@ -7,7 +7,6 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY ["AccountService/Command/Api/AccountService.Command.Api.csproj", "AccountService/Command/Api/"]
 COPY ["Infrastructure.Api/Infrastructure.Api.csproj", "Infrastructure.Api/"]
-COPY ["SharedKernel/SharedKernel.csproj", "SharedKernel/"]
 COPY ["AccountService/Command/Application/AccountService.Command.Application.csproj", "AccountService/Command/Application/"]
 COPY ["AccountService/Command/Domain/AccountService.Command.Domain.csproj", "AccountService/Command/Domain/"]
 COPY ["AccountService/Command/Infrastructure/AccountService.Command.Infrastructure.csproj", "AccountService/Command/Infrastructure/"]

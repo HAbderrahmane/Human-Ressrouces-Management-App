@@ -1,6 +1,6 @@
-using Infrastructure.Api.Messaging;
-using Infrastructure.Api.Extensions;
 using AccountService.Query.Infrastructure;
+using Infrastructure.Api.Extensions;
+using Infrastructure.Api.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 

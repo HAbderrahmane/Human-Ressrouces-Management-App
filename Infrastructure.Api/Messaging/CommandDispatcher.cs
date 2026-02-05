@@ -1,5 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-
 namespace Infrastructure.Api.Messaging;
 
 /// <summary>

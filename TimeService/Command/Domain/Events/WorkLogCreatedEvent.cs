@@ -1,4 +1,4 @@
-﻿using SharedKernel.Events;
+﻿using Infrastructure.Api.Base;
 
 namespace TimeService.Command.Domain.Events
 {

@@ -1,9 +1,8 @@
-﻿using AccountService.Command.Domain;
+﻿using AccountService.Command.Application.Commands;
+using AccountService.Command.Domain;
 using AccountService.Command.Domain.Events;
 using Infrastructure.Api.Messaging;
 using Infrastructure.Api.Persistence;
-using AccountService.Command.Application.Commands;
-using AccountService.Command.Application.DTOs;
 
 namespace AccountService.Command.Application.Handlers;
 

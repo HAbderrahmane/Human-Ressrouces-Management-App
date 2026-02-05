@@ -7,7 +7,6 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY ["TimeService/Command/Api/TimeService.Command.Api.csproj", "TimeService/Command/Api/"]
 COPY ["Infrastructure.Api/Infrastructure.Api.csproj", "Infrastructure.Api/"]
-COPY ["SharedKernel/SharedKernel.csproj", "SharedKernel/"]
 COPY ["TimeService/Command/Application/TimeService.Command.Application.csproj", "TimeService/Command/Application/"]
 COPY ["TimeService/Command/Domain/TimeService.Command.Domain.csproj", "TimeService/Command/Domain/"]
 COPY ["TimeService/Command/Infrastructure/TimeService.Command.Infrastructure.csproj", "TimeService/Command/Infrastructure/"]

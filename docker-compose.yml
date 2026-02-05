@@ -124,6 +124,24 @@ services:
       - minimal
       - full
 
+  hrmapp-gateway:
+    build:
+      context: .
+      dockerfile: HrmApp.Gateway/Dockerfile
+    container_name: hrmapp-gateway
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      - postgres_write
+      - mongo_read
+      - kafka
+    profiles:
+      - minimal
+      - full
+
   account-service-command:
     build:
       context: .

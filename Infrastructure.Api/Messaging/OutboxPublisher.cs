@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SharedKernel.Events;
+﻿using Infrastructure.Api.Base;
+using Microsoft.EntityFrameworkCore;
+
 using System.Text.Json;
 
 namespace Infrastructure.Api.Messaging;

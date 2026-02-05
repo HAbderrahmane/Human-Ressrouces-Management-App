@@ -1,8 +1,7 @@
 ﻿using Infrastructure.Api;
+using Infrastructure.Api.Base;
 using Infrastructure.Api.Messaging;
 using Infrastructure.Api.Middleware;
-
-using SharedKernel.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 

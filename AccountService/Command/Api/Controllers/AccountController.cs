@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using AccountService.Command.Application.Commands;
+﻿using AccountService.Command.Application.Commands;
 using AccountService.Command.Application.DTOs;
-using Mapster;
 using Infrastructure.Api.Messaging;
+using Mapster;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AccountService.Command.Api.Controllers;
 

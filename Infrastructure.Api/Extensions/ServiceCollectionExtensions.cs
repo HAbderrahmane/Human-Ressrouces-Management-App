@@ -1,6 +1,5 @@
-using System.Reflection;
 using Infrastructure.Api.Messaging;
-using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Infrastructure.Api.Extensions;
 

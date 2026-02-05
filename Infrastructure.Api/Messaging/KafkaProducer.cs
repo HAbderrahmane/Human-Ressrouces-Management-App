@@ -1,6 +1,7 @@
 ﻿using Confluent.Kafka;
 using Confluent.Kafka.Admin;
-using SharedKernel.Events;
+using Infrastructure.Api.Base;
+
 using System.Text.Json;
 
 namespace Infrastructure.Api.Messaging;

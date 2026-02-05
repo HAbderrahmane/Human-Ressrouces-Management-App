@@ -1,8 +1,8 @@
 using AccountService.Command.Application.Commands;
 using AccountService.Command.Application.Handlers;
+using Infrastructure.Api.Extensions;
 using Infrastructure.Api.Messaging;
 using Infrastructure.Api.Persistence;
-using Infrastructure.Api.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

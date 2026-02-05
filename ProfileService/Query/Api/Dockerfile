@@ -7,7 +7,6 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY ["ProfileService/Query/Api/ProfileService.Query.Api.csproj", "ProfileService/Query/Api/"]
 COPY ["Infrastructure.Api/Infrastructure.Api.csproj", "Infrastructure.Api/"]
-COPY ["SharedKernel/SharedKernel.csproj", "SharedKernel/"]
 COPY ["ProfileService/Query/Application/ProfileService.Query.Application.csproj", "ProfileService/Query/Application/"]
 COPY ["ProfileService/Query/Domain/ProfileService.Query.Domain.csproj", "ProfileService/Query/Domain/"]
 COPY ["ProfileService/Query/Infrastructure/ProfileService.Query.Infrastructure.csproj", "ProfileService/Query/Infrastructure/"]
